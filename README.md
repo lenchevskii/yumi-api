@@ -1,2 +1,3 @@
-# yumi-api
-YUMI API. Based on proposed Documentaion.
+**YUMI API**
+
+Based on [YUMI API Documentation](https://yumi2.docs.apiary.io/#).
