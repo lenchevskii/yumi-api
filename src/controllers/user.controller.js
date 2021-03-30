@@ -1,7 +1,5 @@
-const { Controller, Post, Body, Get, Put, Delete, Param, Bind, Req, Dependencies, forwardRef } = require('@nestjs/common');
+const { Controller, Post, Body, Get, Put, Delete, Param, Dependencies } = require('@nestjs/common');
 const { YumiService } = require('../yumi.service');
-// import { YumiContact } from '../entities/contact.entity';
-// import { YumiUser } from '../entities/user.entity'
 
 @Controller('users')
 @Dependencies(YumiService)
