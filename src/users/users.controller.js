@@ -1,27 +1,24 @@
 import {
-  Controller,
   Get,
   Post,
-  Patch,
-  Delete,
+  Bind,
   Body,
+  Patch,
   Param,
+  Delete,
+  Controller,
   HttpStatus,
+  Injectable,
+  Dependencies,
 } from '@nestjs/common';
 
 import { UsersService } from './users.service';
-import { UsersDTO } from './users.dto';
 
-const trace = (x) => {
-  console.log(x);
-  return x;
-};
-
+@Injectable()
 @Controller('users')
+@Dependencies(UsersService)
 export class UsersController {
-  constructor(private usersService: UsersService) {
-    trace(this);
-  }
+  constructor(usersService) { this.usersService = usersService }
 
   @Get()
   async showAllUsers() {
@@ -35,7 +32,8 @@ export class UsersController {
   }
 
   @Post()
-  async createUsers(@Body() data: UsersDTO) {
+  @Bind(Body())
+  async createUser(data) {
     const user = await this.usersService.create(data);
     return {
       statusCode: HttpStatus.OK,
@@ -45,7 +43,8 @@ export class UsersController {
   }
 
   @Get(':yumi_user_id')
-  async readUser(@Param('yumi_user_id') yumi_user_id: number) {
+  @Bind(Param('yumi_user_id'))
+  async readUser(yumi_user_id) {
     const data = await this.usersService.read(yumi_user_id);
     return {
       statusCode: HttpStatus.OK,
@@ -55,10 +54,8 @@ export class UsersController {
   }
 
   @Patch(':yumi_user_id')
-  async uppdateUser(
-    @Param('yumi_user_id') yumi_user_id: number,
-    @Body() data: Partial<UsersDTO>,
-  ) {
+  @Bind(Param('yumi_user_id'), Body())
+  async uppdateUser(yumi_user_id, data) {
     await this.usersService.update(yumi_user_id, data);
     return {
       statusCode: HttpStatus.OK,
@@ -67,7 +64,8 @@ export class UsersController {
   }
 
   @Delete(':yumi_user_id')
-  async deleteUser(@Param('yumi_user_id') yumi_user_id: number) {
+  @Bind(Param('yumi_user_id'))
+  async deleteUser(yumi_user_id) {
     await this.usersService.destroy(yumi_user_id);
     return {
       statusCode: HttpStatus.OK,

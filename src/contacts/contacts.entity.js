@@ -3,11 +3,11 @@ import { Entity, Column, PrimaryColumn } from 'typeorm';
 @Entity('contacts')
 export class ContactsEntity {
   @PrimaryColumn({ nullable: false, type: Number })
-  id: number;
+  id;
 
   @Column({ nullable: true, type: String })
-  yumi_user_id: number;
+  yumi_user_id;
 
   @Column({ nullable: true, type: String })
-  contact_user_id: number;
+  contact_user_id;
 }

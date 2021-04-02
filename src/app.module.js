@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Dependencies, Injectable, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -6,6 +6,7 @@ import { UsersModule } from './users/users.module';
 import { ContactsModule } from './contacts/contacts.module';
 import { join } from 'path';
 import { Connection } from 'typeorm';
+import { trace } from './app.helper';
 
 @Module({
   imports: [
@@ -26,6 +27,9 @@ import { Connection } from 'typeorm';
   controllers: [AppController],
   providers: [AppService],
 })
+
+// @Injectable()
+// @Dependencies(Connection)
 export class AppModule {
-  constructor(private readonly connection: Connection) {}
+  // constructor(connection) { this.connection = trace(connection) }
 }

@@ -7,14 +7,18 @@ import {
   Body,
   Param,
   HttpStatus,
+  Dependencies,
+  Injectable,
+  Bind,
 } from '@nestjs/common';
 
 import { ContactsService } from './contacts.service';
-import { ContactsDTO } from './contacts.dto';
 
+@Injectable()
 @Controller('contacts')
+@Dependencies(ContactsService)
 export class ContactsController {
-  constructor(private contactsService: ContactsService) {}
+  constructor(contactsService) { this.contactsService = contactsService }
 
   @Get()
   async showAllContacts() {
@@ -27,7 +31,8 @@ export class ContactsController {
   }
 
   @Post()
-  async createContact(@Body() data: ContactsDTO) {
+  @Bind(Body())
+  async createContact(data) {
     const contact = await this.contactsService.create(data);
     return {
       statusCode: HttpStatus.OK,
@@ -37,7 +42,8 @@ export class ContactsController {
   }
 
   @Get(':id')
-  async readContact(@Param('id') id: number) {
+  @Bind(Param('id'))
+  async readContact(id) {
     const data = await this.contactsService.read(id);
     return {
       statusCode: HttpStatus.OK,
@@ -47,10 +53,8 @@ export class ContactsController {
   }
 
   @Patch(':id')
-  async uppdateContact(
-    @Param('id') id: number,
-    @Body() data: Partial<ContactsDTO>,
-  ) {
+  @Bind(Param('id'), Body())
+  async uppdateContact(id, data) {
     await this.contactsService.update(id, data);
     return {
       statusCode: HttpStatus.OK,
@@ -59,7 +63,8 @@ export class ContactsController {
   }
 
   @Delete(':id')
-  async deleteContact(@Param('id') id: number) {
+  @Bind(Param('id'))
+  async deleteContact(id) {
     await this.contactsService.destroy(id);
     return {
       statusCode: HttpStatus.OK,

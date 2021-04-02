@@ -1,22 +1,18 @@
-import { Repository } from 'typeorm';
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { Dependencies, Injectable } from '@nestjs/common';
+import { getRepositoryToken } from '@nestjs/typeorm';
 
 import { UsersEntity } from './users.entity';
-import { UsersDTO } from './users.dto';
 
 @Injectable()
+@Dependencies(getRepositoryToken(UsersEntity))
 export class UsersService {
-  constructor(
-    @InjectRepository(UsersEntity)
-    private usersRepository: Repository<UsersEntity>,
-  ) {}
+  constructor(usersRepository) { this.usersRepository = usersRepository }
 
   async showAll() {
     return await this.usersRepository.find();
   }
 
-  async create(data: UsersDTO) {
+  async create(data) {
     const user = this.usersRepository.create(data);
     await this.usersRepository.save(data);
     return user;
@@ -30,7 +26,7 @@ export class UsersService {
   //   });
   // }
 
-  async read(yumi_user_id: number) {
+  async read(yumi_user_id) {
     return await this.usersRepository
       .findOne({
         where: { yumi_user_id: yumi_user_id },
@@ -38,12 +34,12 @@ export class UsersService {
       .then((x) => console.log(x));
   }
 
-  async update(yumi_user_id: number, data: Partial<UsersDTO>) {
+  async update(yumi_user_id, data) {
     await this.usersRepository.update(yumi_user_id, data);
     return await this.usersRepository.findOne(yumi_user_id);
   }
 
-  async destroy(yumi_user_id: number) {
+  async destroy(yumi_user_id) {
     await this.usersRepository.delete(yumi_user_id);
     return { deleted: true };
   }

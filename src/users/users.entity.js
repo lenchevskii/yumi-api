@@ -4,10 +4,10 @@ import * as crypto from 'crypto';
 @Entity('users')
 export class UsersEntity {
   @PrimaryColumn({ nullable: false, type: Number })
-  yumi_user_id: number;
+  yumi_user_id;
 
   @Column({ nullable: true, type: String })
-  hashtag: string;
+  hashtag;
 
   // @Column({ nullable: true, type: String })
   // email: string;
@@ -18,5 +18,5 @@ export class UsersEntity {
   }
 
   @Column({ nullable: true, type: String })
-  password: string;
+  password;
 }
