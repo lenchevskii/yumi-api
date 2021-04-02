@@ -5,24 +5,24 @@ const { YumiUser } = require('./entities/user.entity')
 @Dependencies(YumiUser)
 export class YumiService {
 
-  constructor(yumiRepository) { this.yumiRepository = yumiRepository }
+  constructor(yumiUserRepository) { this.yumiUserRepository = yumiUserRepository }
 
   async getUsers(yumi_user_id) {
-    return await this.yumiRepository.find(yumi_user_id);
+    return await this.yumiUserRepository.find(yumi_user_id);
   }
 
   async getUser(yumi_user_id) {
-    return await this.yumiRepository.find({
+    return await this.yumiUserRepository.find({
       select: ["hashtag", "email", "password"],
       where: [{ "yumi_user_id": yumi_user_id }]
     });
   }
 
   async updateUser(yumi_user) {
-    this.yumiRepository.save(yumi_user)
+    this.yumiUserRepository.save(yumi_user)
   }
 
   async deleteUser(yumi_user_id) {
-    this.yumiRepository.delete(yumi_user_id);
+    this.yumiUserRepository.delete(yumi_user_id);
   }
 }

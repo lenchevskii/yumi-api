@@ -1,11 +1,12 @@
 const { Controller, Post, Body, Get, Put, Delete, Param, Dependencies } = require('@nestjs/common');
 const { YumiService } = require('../yumi.service');
+const trace = (x) => { console.log(x); return x }
 
 @Controller('users')
 @Dependencies(YumiService)
 export class YumiUserController {
 
-  constructor(yumiService) { this.yumiService = yumiService }
+  constructor(yumiService) { this.yumiService = trace(yumiService) }
 
   @Get(':id')
   @Param()
