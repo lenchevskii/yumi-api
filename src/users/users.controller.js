@@ -46,11 +46,16 @@ export class UsersController {
   @Bind(Param('yumi_user_id'))
   async readUser(yumi_user_id) {
     const data = await this.usersService.read(yumi_user_id);
-    return {
-      statusCode: HttpStatus.OK,
-      message: `User:${data} fetched successfully.`,
-      data: data,
-    };
+    return data === undefined
+      ? {
+        statusCode: HttpStatus.BAD_REQUEST,
+        message: `User:${yumi_user_id} doesn't exist.`
+      }
+      : {
+        statusCode: HttpStatus.OK,
+        message: `User:${yumi_user_id} fetched successfully.`,
+        data: data,
+      };
   }
 
   @Patch(':yumi_user_id')

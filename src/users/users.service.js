@@ -2,6 +2,7 @@ import { Dependencies, Injectable } from '@nestjs/common';
 import { getRepositoryToken } from '@nestjs/typeorm';
 
 import { UsersEntity } from './users.entity';
+import { trace } from '../app.helper'
 
 @Injectable()
 @Dependencies(getRepositoryToken(UsersEntity))
@@ -28,11 +29,18 @@ export class UsersService {
 
   async read(yumi_user_id) {
     return await this.usersRepository
-      .findOne({
-        where: { yumi_user_id: yumi_user_id },
-      })
-      .then((x) => console.log(x));
+      .createQueryBuilder('users')
+      .where('users.yumi_user_id = :yumi_user_id', { yumi_user_id: yumi_user_id })
+      .getOne();
   }
+
+  // async read(yumi_user_id) {
+  //   return await this.usersRepository
+  //     .findOne({
+  //       where: { yumi_user_id: yumi_user_id },
+  //     })
+  //     .then((x) => console.log(x));
+  // }
 
   async update(yumi_user_id, data) {
     await this.usersRepository.update(yumi_user_id, data);

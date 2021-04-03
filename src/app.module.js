@@ -1,22 +1,30 @@
-import { Dependencies, Injectable, Module } from '@nestjs/common';
+import { join } from 'path';
+import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppController } from './app.controller';
+
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
+import { AppController } from './app.controller';
 import { ContactsModule } from './contacts/contacts.module';
-import { join } from 'path';
-import { Connection } from 'typeorm';
-import { trace } from './app.helper';
+
+const {
+  DB_TYPE,
+  DB_HOST,
+  DB_PORT,
+  DB_USERNAME,
+  DB_PSSWD,
+  DB_NAME
+} = require('dotenv').config().parsed
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: '1234567890',
-      database: 'yumi',
+      type: DB_TYPE,
+      host: DB_HOST,
+      port: DB_PORT,
+      username: DB_USERNAME,
+      password: DB_PSSWD,
+      database: DB_NAME,
       synchronize: false,
       logging: true,
       entities: [join(__dirname, '**', '*.entity.{ts,js}')],
@@ -28,8 +36,4 @@ import { trace } from './app.helper';
   providers: [AppService],
 })
 
-// @Injectable()
-// @Dependencies(Connection)
-export class AppModule {
-  // constructor(connection) { this.connection = trace(connection) }
-}
+export class AppModule { }
