@@ -45,11 +45,16 @@ export class ContactsController {
   @Bind(Param('id'))
   async readContact(id) {
     const data = await this.contactsService.read(id);
-    return {
-      statusCode: HttpStatus.OK,
-      message: 'Contact fetched successfully',
-      data,
-    };
+    return data === undefined
+      ? {
+        statusCode: HttpStatus.BAD_REQUEST,
+        message: `User:${id} doesn't exist.`
+      }
+      : {
+        statusCode: HttpStatus.OK,
+        message: `User:${id} fetched successfully.`,
+        data: data,
+      };
   }
 
   @Patch(':id')

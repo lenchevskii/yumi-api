@@ -4,7 +4,6 @@ import {
   Bind,
   Body,
   Patch,
-  Param,
   Delete,
   Controller,
   HttpStatus,
@@ -20,30 +19,30 @@ import { UsersService } from './users.service';
 export class UsersController {
   constructor(usersService) { this.usersService = usersService }
 
-  @Get()
+  @Get('all')
   async showAllUsers() {
     const users = await this.usersService.showAll();
     console.log("We'r inside the ShowAllUsers method");
     return {
       statusCode: HttpStatus.OK,
       message: 'Users fetched successfully',
-      users,
+      users: users,
     };
   }
 
-  @Post()
+  @Post('new')
   @Bind(Body())
   async createUser(data) {
     const user = await this.usersService.create(data);
     return {
       statusCode: HttpStatus.OK,
       message: 'User created successfully',
-      user,
+      user: user,
     };
   }
 
-  @Get(':yumi_user_id')
-  @Bind(Param('yumi_user_id'))
+  @Get('user')
+  @Bind(Body('yumi_user_id'))
   async readUser(yumi_user_id) {
     const data = await this.usersService.read(yumi_user_id);
     return data === undefined
@@ -58,23 +57,24 @@ export class UsersController {
       };
   }
 
-  @Patch(':yumi_user_id')
-  @Bind(Param('yumi_user_id'), Body())
-  async uppdateUser(yumi_user_id, data) {
-    await this.usersService.update(yumi_user_id, data);
+  @Patch('update')
+  @Bind(Body())
+  async uppdateUser(body) {
+    const updated = await this.usersService.update(body.yumi_user_id, body);
     return {
       statusCode: HttpStatus.OK,
       message: 'User updated successfully',
+      updated: updated,
     };
   }
 
-  @Delete(':yumi_user_id')
-  @Bind(Param('yumi_user_id'))
+  @Delete('delete')
+  @Bind(Body('yumi_user_id'))
   async deleteUser(yumi_user_id) {
-    await this.usersService.destroy(yumi_user_id);
+    const deleted = await this.usersService.destroy(yumi_user_id);
     return {
       statusCode: HttpStatus.OK,
-      message: 'User deleted successfully',
+      deleted: deleted,
     };
   }
 }

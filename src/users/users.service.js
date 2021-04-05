@@ -19,7 +19,7 @@ export class UsersService {
     return user;
   }
 
-  // async findByEmail(email: string): Promise<UsersDTO> {
+  // async findByEmail(email) {
   //   return await this.usersRepository.findOne({
   //     where: {
   //       email: email,
